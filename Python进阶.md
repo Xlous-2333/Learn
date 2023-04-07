@@ -454,6 +454,7 @@ p.join()
 > 进程具有独立的运行空间
 >
 > 进程通信的模块： `multiprocessing` 
+> 
 > 管道类： `Pipe` 		队列类： `Queue` 
 
 Pipe:
