@@ -253,7 +253,7 @@ print(add.__name__)
 
 - 多态
 
-  ​	一类事物可以有多种形态，与多态性不同，多态性指不同功能的方法可以使用相同的名字
+  ​	一类事物可以有多种形态，与多态性不同，多态性指不同功能的方法可以使用相同的名字，通过一个
 
 #### Python类
 
@@ -405,7 +405,7 @@ def id(self):
 > 多进程的模块： `multiprocessing` 	类： `Process` 
 
 ```python
-# 1.导包
+# 1.导入
 from multiprocessing import Process
 
 # 2.创建进程
@@ -416,7 +416,7 @@ p = Process(target=func, args=(tuple, ))
 # 3.启动子进程
 p.start()
 
-# 4.等待子进程执行完毕后继续执行父进程
+# 4.使主进程挂起，等待子进程执行完毕后继续执行
 # 控制执行过程的手段，非必要
 p.join()
 ```
@@ -459,7 +459,7 @@ p.join()
 Pipe:
 
 ```python
-# 1.导包
+# 1.导入
 from multiprocessing import Pipe
 
 # 2.创建管道
@@ -509,7 +509,7 @@ Queue:
 > 通信过程实际传递的是对象的引用，若担心值被修改，建议采用不可修改的数据结构或一个对象的深拷贝
 
 ```python
-# 1.导包
+# 1.导入
 from multiprocessing import Queue
 
 # 2.创建队列
@@ -569,3 +569,68 @@ def main_queue():
 	Process(target=consumer, args=(q,)).start()
 ```
 
+### 进程同步
+
+> 模块：multiprocessing
+>
+> 共享变量代理器： `Value` 、 `Array` 		锁操作： `Lock` 
+
+**Value**:
+
+```python
+# 1.导入
+from multiprocessing import Value
+
+# 2.创建一个全局变量，类型为 int ，初始值为 0
+val = Value('i', 0)
+
+# 3.使用变量
+val.value += 1
+```
+
+- Value虽然可提供多线程共用的变量，但不提供操作锁
+
+**Lock**:
+
+```python
+# 1.导入
+from multiprocessing import Lock
+
+# 2.创建一把锁
+# Lock方法返回一把全局锁lock，使用范围为当前主进程及其子进程(运行当前Python文件过程中有效)
+# 加锁用acquire()，解锁用release()
+lock = Lock()
+
+# 3.加解锁
+lock.acquire()
+# 对临界资源进行操作，如：
+val.value += 1
+lock.release()
+
+#可简写为： 
+with lock:
+    val.value += 1
+```
+
+### 进程池
+
+
+
+## 模块
+
+### OS
+
+> 提供系统操作的接口，或获取系统信息
+>
+> import os
+
+```python
+filename = './Project/Learn/Python_Learn.py'
+os.path.abspath(filename)  # 从相对路径(可以是文件/文件夹)得到绝对路径 E:\Project\Learn\Python_Learn.py
+os.path.basename(filename)  # 返回文件名(偏向字符串操作) Python_Learn.py
+os.path.dirname(filename)  # 返回文件路径(偏向字符串操作) /Project/Learn
+os.path.isfile(filename)  # 是否是文件(偏向文件操作) True
+os.path.isdir(filename)  # 是否是文件夹(偏向文件操作) False
+os.path.exists(filename)  # 是否存在路径 True
+os.path.join('/Project/Learn', 'Python_Learn.py')  # 拼接路径 Windows上：/Project/Learn\Python_Learn.py
+```
